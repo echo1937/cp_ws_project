@@ -36,9 +36,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'channels',
-    'celery_progress',
-    'celery_progress.websockets',
+    'channels',  # 缺失时会导致websocket请求404
+    'celery_progress',  # 引入celery_progress的static文件
+    'celery_progress.websockets',  # ws_error_view执行至异常时会卡住 todo why?
 ]
 
 MIDDLEWARE = [
