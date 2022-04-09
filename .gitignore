@@ -240,3 +240,5 @@ dmypy.json
 cython_debug/
 
 .idea
+*/migrations/*
+!*/migrations/__init__.py

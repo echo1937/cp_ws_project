@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>WS</title>
+    {% load static %}
+    <script src="{% static 'celery_progress/celery_progress.js' %}"></script>
+    <script src="{% static 'celery_progress/websockets.js' %}"></script>
+</head>
+<body>
+{% include 'celery_progress/ws_progress.html' %}
+</body>
+</html>
