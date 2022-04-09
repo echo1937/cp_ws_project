@@ -1,3 +1,6 @@
 django ~= 3.2.5
 celery[redis] ~= 5.2.6
+    # https://docs.celeryq.dev/en/stable/getting-started/introduction.html#bundles
 celery-progress[websockets,redis] ~= 0.1.2
+    # Requires-Dist: channels ; extra == 'websockets'
+    # Requires-Dist: channels-redis ; extra == 'redis'
