@@ -1,7 +1,5 @@
 # cp_ws_project
 
-celery progress websocket project.
-
 This is an example project demonstrating the capabilities of [this project](https://github.com/czue/celery-progress).
 
 ### Channels
@@ -34,3 +32,6 @@ This is an example project demonstrating the capabilities of [this project](http
 - CELERY_RESULT_BACKEND -- 记录任务执行结果的组件
 - [CHANNEL_LAYERS](https://channels.readthedocs.io/en/stable/topics/channel_layers.html)
 
+### See also
+
+- [cp_ws-example](https://github.com/EJH2/cp_ws-example)
