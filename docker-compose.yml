@@ -1,0 +1,70 @@
+version: "3.3"
+
+services:
+  db:
+    image: mysql/mysql-server:5.7
+    environment:
+      - "MYSQL_ROOT_PASSWORD=cp_ws_project"
+      - "MYSQL_ROOT_HOST=%"
+      - "MYSQL_DATABASE=cp_ws"
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    networks:
+      - web_net
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  redis:
+    image: redis:6.2.6
+    networks:
+      - web_net
+    depends_on:
+      - db
+    volumes:
+      - redis_data:/data
+
+  celery:
+    build:
+      context: ./
+      dockerfile: Dockerfile_celery
+    env_file:
+      - ./deploy/gunicorn/django.env
+    networks:
+      - web_net
+    depends_on:
+      - redis
+
+  gunicorn:
+    build:
+      context: ./
+      dockerfile: Dockerfile_gunicorn
+    env_file:
+      - ./deploy/gunicorn/django.env
+    networks:
+      - web_net
+    volumes:
+      - static:/static
+    restart: always
+    depends_on:
+      - celery
+
+
+  nginx:
+    image: nginx:stable
+    volumes:
+      - static:/static
+      - ./deploy/nginx/default.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - "8080:80"
+    networks:
+      - web_net
+    depends_on:
+      - gunicorn
+
+networks:
+  web_net:
+volumes:
+  static:
+  mysql_data:
+  redis_data:

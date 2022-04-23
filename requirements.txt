@@ -1,6 +1,9 @@
-django ~= 3.2.5
-celery[redis] ~= 5.2.6
+django~=3.2.5
+celery[redis]~=5.2.6
     # https://docs.celeryq.dev/en/stable/getting-started/introduction.html#bundles
-celery-progress[websockets,redis] ~= 0.1.2
+celery-progress[websockets,redis]~=0.1.2
     # Requires-Dist: channels ; extra == 'websockets'
     # Requires-Dist: channels-redis ; extra == 'redis'
+gunicorn~=20.1.0
+uvicorn[standard]~=0.17.6
+    # https://docs.djangoproject.com/zh-hans/3.2/howto/deployment/asgi/uvicorn/

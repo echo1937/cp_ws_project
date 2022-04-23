@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -19,12 +20,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-edczkim3hp+r^7+z!=zd_)((n^v26#ek93+wn@b0oeu333jq*a'
+# SECRET_KEY = 'django-insecure-edczkim3hp+r^7+z!=zd_)((n^v26#ek93+wn@b0oeu333jq*a'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', True) is True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -78,8 +80,12 @@ ASGI_APPLICATION = 'cp_ws_project.asgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cp_ws',
+        'USER': 'root',
+        'PASSWORD': 'cp_ws_project',
+        'HOST': os.getenv('MYSQL_HOST', '127.0.0.1'),
+        'PORT': '3306',
     }
 }
 
@@ -106,7 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
@@ -118,17 +124,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REDIS_HOST = os.getenv('REDIS_HOST', '127.0.0.1')
+
 CELERY_TIMEZONE = 'Asia/Shanghai'
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379/8'
-CELERY_RESULT_BACKEND = 'redis://127.0.0.1:6379/9'
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:6379/4'
+CELERY_RESULT_BACKEND = f'redis://{REDIS_HOST}:6379/5'
 
 CELERY_ACCEPT_CONTENT = ['json']  # Default: {'json'} (set, list, or tuple).
 CELERY_TASK_SERIALIZER = 'json'  # Default: "json" (since 4.0, earlier: pickle).
@@ -136,6 +145,6 @@ CELERY_TASK_SERIALIZER = 'json'  # Default: "json" (since 4.0, earlier: pickle).
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {'hosts': [('127.0.0.1', 6379)]}
+        'CONFIG': {'hosts': [(REDIS_HOST, 6379)]},
     }
 }
